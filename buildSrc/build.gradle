@@ -1,0 +1,119 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'kotlin'
+
+def getGroup = { ->
+    return 'com.github.oliverjonas'
+}
+
+def getArtifact = { ->
+    return 'unmeta'
+}
+
+def getVersion = { ->
+    return '1.0.0'
+}
+
+buildscript {
+    ext.kotlin_version = '1.4.21'
+    ext.gradle_version = '3.5.3'
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.android.tools.build:gradle:$gradle_version"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+    }
+}
+
+repositories {
+    google()
+    jcenter()
+}
+
+gradlePlugin {
+    plugins {
+        create(getGroup() + '.' + getArtifact()) {
+            id = getGroup() + '.' + getArtifact()
+            implementationClass = getGroup() + '.' + getArtifact() + '.UnmetaPlugin'
+        }
+    }
+}
+
+dependencies {
+    // Android gradle plugin will allow us to access Android specific features
+    implementation "com.android.tools.build:gradle:$gradle_version"
+}
+
+publishing {
+    publications {
+//        // publishMavenJarPublicationToMavenLocal
+//        mavenJar(MavenPublication) {
+//            from components.java
+//            pom.withXml {
+//                asNode().dependencies.dependency.each { dep ->
+//                    dep.parent().remove(dep)
+//                }
+//            }
+//            group = getGroup()
+//            artifactId = getArtifact()
+//            version = getVersion()
+//        }
+//        // publishMavenJarPublicationToGitHubPackagesRepository
+//        gpr(MavenPublication) {
+//            from components.java
+//            pom.withXml {
+//                asNode().dependencies.dependency.each { dep ->
+//                    dep.parent().remove(dep)
+//                }
+//            }
+//            group = getGroup()
+//            artifactId = getArtifact()
+//            version = getVersion()
+//        }
+        // bintrayUpload
+        Publication(MavenPublication) {
+            from components.java
+            pom.withXml {
+                asNode().dependencies.dependency.each { dep ->
+                    dep.parent().remove(dep)
+                }
+            }
+            group = getGroup()
+            groupId = getGroup()
+            artifactId = getArtifact()
+            version = getVersion()
+        }
+    }
+    repositories {
+//        mavenLocal()
+//        maven {
+//            name = 'GitHubPackages'
+//            url = uri('https://maven.pkg.github.com/oliver-jonas/' + getArtifact())
+//            credentials {
+//                username = 'oliver-jonas'
+//                password = System.getenv('GPR_API_KEY')
+//            }
+//        }
+        jcenter()
+    }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['Publication']
+    pkg {
+        repo = 'maven'
+        name = 'unmeta'
+        userOrg = user
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/oliver-jonas/unmeta.git'
+        version {
+            name = getVersion()
+        }
+    }
+}
