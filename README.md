@@ -16,15 +16,13 @@ buildscript {
     repositories {
         .
         .
-        maven {
-            url 'https://dl.bintray.com/oliverjonas/maven'
-        }
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
         .
         .
-        classpath 'com.github.oliverjonas:unmeta:1.0.0'       
+        classpath 'com.github.oliver-jonas.unmeta:unmeta:1.0.0'
     }
 }
 .
