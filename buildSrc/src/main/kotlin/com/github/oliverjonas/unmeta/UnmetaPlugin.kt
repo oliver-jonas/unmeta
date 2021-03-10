@@ -81,10 +81,7 @@ class UnmetaTransform(
                     var modifiedClassBytes: ByteArray? = null
 
                     if (it.name.endsWith(".class")) {
-                        modifiedClassBytes = modifyClass(sourceClassBytes)
-                        if (modifiedClassBytes != null) {
-                            println("Removed @kotlin.Metadata from $it")
-                        }
+                        modifiedClassBytes = modifyClass(it.path, sourceClassBytes)
                     }
 
                     if (modifiedClassBytes == null) {
@@ -108,25 +105,35 @@ class UnmetaTransform(
         }
     }
 
-    private fun modifyClass(srcClass: ByteArray): ByteArray? {
+    private fun modifyClass(path: String, srcClass: ByteArray): ByteArray? {
         val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
-        val visitor = UnmetaClassVisitor(classWriter)
+        val visitor = UnmetaClassVisitor(path, classWriter)
         val cr = ClassReader(srcClass)
         cr.accept(visitor, 0)
         return if (visitor.modified) classWriter.toByteArray() else null
     }
 }
 
-class UnmetaClassVisitor(cv: ClassVisitor) : ClassVisitor(Opcodes.ASM4, cv), Opcodes {
+class UnmetaClassVisitor(private val path: String, cv: ClassVisitor) :
+    ClassVisitor(Opcodes.ASM4, cv), Opcodes {
 
     var modified = false
 
     override fun visitAnnotation(desc: String?, visible: Boolean): AnnotationVisitor? {
-        return if (desc != "Lkotlin/Metadata;") {
-            super.visitAnnotation(desc, visible)
-        } else {
-            modified = true
-            null
+        return when (desc) {
+            "Lkotlin/Metadata;" -> {
+                println("Removed @Metadata annotation from $path")
+                modified = true
+                null
+            }
+            "Lkotlin/coroutines/jvm/internal/DebugMetadata;" -> {
+                println("Removed @DebugMetadata annotation from $path")
+                modified = true
+                null
+            }
+            else -> {
+                super.visitAnnotation(desc, visible)
+            }
         }
     }
 }
