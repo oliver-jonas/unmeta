@@ -22,7 +22,7 @@ buildscript {
     dependencies {
         .
         .
-        classpath 'com.github.oliver-jonas.unmeta:unmeta:1.0.0'
+        classpath 'com.github.oliver-jonas.unmeta:unmeta:1.0.1'
     }
 }
 .
