@@ -12,7 +12,7 @@ def getArtifact = { ->
 }
 
 def getVersion = { ->
-    return '1.0.0'
+    return '1.0.2'
 }
 
 buildscript {
@@ -23,6 +23,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+        //noinspection DifferentKotlinGradleVersion
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
@@ -46,35 +47,11 @@ gradlePlugin {
 dependencies {
     // Android gradle plugin will allow us to access Android specific features
     implementation "com.android.tools.build:gradle:$gradle_version"
+    implementation 'org.ow2.asm:asm:7.0'
 }
 
 publishing {
     publications {
-//        // publishMavenJarPublicationToMavenLocal
-//        mavenJar(MavenPublication) {
-//            from components.java
-//            pom.withXml {
-//                asNode().dependencies.dependency.each { dep ->
-//                    dep.parent().remove(dep)
-//                }
-//            }
-//            group = getGroup()
-//            artifactId = getArtifact()
-//            version = getVersion()
-//        }
-//        // publishMavenJarPublicationToGitHubPackagesRepository
-//        gpr(MavenPublication) {
-//            from components.java
-//            pom.withXml {
-//                asNode().dependencies.dependency.each { dep ->
-//                    dep.parent().remove(dep)
-//                }
-//            }
-//            group = getGroup()
-//            artifactId = getArtifact()
-//            version = getVersion()
-//        }
-        // bintrayUpload
         Publication(MavenPublication) {
             from components.java
             pom.withXml {
@@ -89,15 +66,6 @@ publishing {
         }
     }
     repositories {
-//        mavenLocal()
-//        maven {
-//            name = 'GitHubPackages'
-//            url = uri('https://maven.pkg.github.com/oliver-jonas/' + getArtifact())
-//            credentials {
-//                username = 'oliver-jonas'
-//                password = System.getenv('GPR_API_KEY')
-//            }
-//        }
         jcenter()
     }
 }

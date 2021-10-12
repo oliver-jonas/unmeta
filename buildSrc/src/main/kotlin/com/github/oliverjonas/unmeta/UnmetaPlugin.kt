@@ -115,7 +115,7 @@ class UnmetaTransform(
 }
 
 class UnmetaClassVisitor(private val path: String, cv: ClassVisitor) :
-    ClassVisitor(Opcodes.ASM4, cv), Opcodes {
+    ClassVisitor(Opcodes.ASM7, cv), Opcodes {
 
     var modified = false
 
