@@ -1,5 +1,4 @@
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'kotlin'
 
@@ -12,7 +11,7 @@ def getArtifact = { ->
 }
 
 def getVersion = { ->
-    return '1.0.2'
+    return '1.0.3'
 }
 
 buildscript {
@@ -20,19 +19,18 @@ buildscript {
     ext.gradle_version = '3.5.3'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         //noinspection DifferentKotlinGradleVersion
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.android.tools.build:gradle:$gradle_version"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 gradlePlugin {
@@ -47,6 +45,7 @@ gradlePlugin {
 dependencies {
     // Android gradle plugin will allow us to access Android specific features
     implementation "com.android.tools.build:gradle:$gradle_version"
+    //noinspection GradleDependency
     implementation 'org.ow2.asm:asm:7.0'
 }
 
@@ -66,22 +65,6 @@ publishing {
         }
     }
     repositories {
-        jcenter()
-    }
-}
-
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['Publication']
-    pkg {
-        repo = 'maven'
-        name = 'unmeta'
-        userOrg = user
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/oliver-jonas/unmeta.git'
-        version {
-            name = getVersion()
-        }
+        mavenCentral()
     }
 }

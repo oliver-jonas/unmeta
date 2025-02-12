@@ -3,13 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.github.oliverjonas.unmeta'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "com.github.oliverjonas.unmeta"
         minSdkVersion 16
-        //noinspection OldTargetApi
-        targetSdkVersion 30
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
     }
@@ -27,8 +26,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //noinspection GradleDependency
+    //noinspection GradleDependency, DifferentStdlibGradleVersion
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //noinspection GradleDependency
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
+    //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.3.1'
 }

@@ -1,10 +1,10 @@
 # unmeta
 
-An Android Gradle plugin to remove all Kotlin @Metadata and @DebugMetadata annotations from the build output.
+An Android Gradle plugin to remove all Kotlin @Metadata, @DebugMetadata and @SourceDebugExtension annotations from the build output.
 
-Kotlin @Metadata and @DebugMetadata annotations are not fully processed by ProGuard / R8 and contain un-obfuscated symbol information, both in binary and plain text forms. This information can be used to more easily reverse engineer your code.
+Kotlin @Metadata, @DebugMetadata and @SourceDebugExtension annotations are not fully processed by ProGuard / R8 and contain un-obfuscated symbol information, both in binary and plain text forms. This information can be used to more easily reverse engineer your code.
 
-This plugin allows removing all Kotlin @Metadata / @DebugMetadata annotations from generated class files. This is safe to do as long as:
+This plugin allows removing all Kotlin @Metadata / @DebugMetadata / @SourceDebugExtension annotations from generated class files. This is safe to do as long as:
 
 * you do not intend to use the resulting binaries as a Kotlin library (@Metadata annotations are used to determine Kotlin function definitions),
 * you are not using Kotlin Reflection (certain reflection functionality depends on the presence of the @Metadata annotations).
@@ -22,7 +22,7 @@ buildscript {
     dependencies {
         .
         .
-        classpath 'com.github.oliver-jonas.unmeta:unmeta:1.0.2'
+        classpath 'com.github.oliver-jonas.unmeta:unmeta:1.0.3'
     }
 }
 .

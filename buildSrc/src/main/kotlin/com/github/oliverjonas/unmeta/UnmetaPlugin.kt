@@ -131,6 +131,11 @@ class UnmetaClassVisitor(private val path: String, cv: ClassVisitor) :
                 modified = true
                 null
             }
+            "Lkotlin/jvm/internal/SourceDebugExtension;" -> {
+                println("Removed @SourceDebugExtension annotation from $path")
+                modified = true
+                null
+            }
             else -> {
                 super.visitAnnotation(desc, visible)
             }
