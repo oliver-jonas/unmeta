@@ -1,14 +1,19 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'com.github.oliverjonas.unmeta'
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.github.oliverjonas.unmeta'
+}
 
 android {
-    compileSdkVersion 34
+    namespace 'com.github.oliverjonas.unmeta'
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.github.oliverjonas.unmeta"
-        minSdkVersion 16
-        targetSdkVersion 35
+        minSdk 21
+        targetSdk 36
         versionCode 1
         versionName "1.0"
     }
@@ -22,14 +27,26 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    unmeta {
+        enabled = gradle.startParameter.taskNames.any { it.toLowerCase().contains('release') }
+        processDependencies = true
+        reportFile = layout.buildDirectory.file('outputs/logs/unmeta-report.txt')
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //noinspection GradleDependency, DifferentStdlibGradleVersion
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    //noinspection GradleDependency
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
-    //noinspection GradleDependency
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
 }

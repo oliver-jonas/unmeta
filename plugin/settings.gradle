@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Name must differ from the containing build ('unmeta') because this build is
+// included into it via pluginManagement.includeBuild(). The published artifact
+// id remains 'unmeta' (see build.gradle).
+rootProject.name = 'unmeta-plugin'
